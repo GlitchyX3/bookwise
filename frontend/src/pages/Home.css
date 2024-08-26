@@ -1,0 +1,60 @@
+/* src/pages/Home.css */
+
+html, body {
+  margin: 0;
+  padding: 0;
+  height: 100%;
+  overflow: hidden; /* Prevents scrolling */
+}
+
+.home {
+  text-align: center;
+  background: url('../assets/backgroundimage.jpg') no-repeat center center fixed;
+  background-size: cover;
+  height: 100vh; /* Ensures the page takes full viewport height */
+  color: #fff;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  position: relative; /* Position relative for child positioning */
+}
+
+.home-content {
+  position: relative; /* Ensure positioning for child elements */
+}
+
+.home-logo {
+  width: 500px; /* Adjust size as needed */
+  height: auto;
+  display: block;
+  margin: 0 auto;
+}
+
+.home-header {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  color: #ffffff;
+  font-size: 2rem; /* Adjust size as needed */
+  font-weight: bold;
+  z-index: 1; /* Ensure it appears above the logo */
+  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5); /* Optional: adds shadow for readability */
+}
+
+.get-started-button {
+  display: inline-block;
+  padding: 10px 20px;
+  font-size: 16px;
+  font-weight: bold;
+  color: #fff;
+  background-color: #007bff;
+  border-radius: 5px;
+  text-decoration: none;
+  transition: background-color 0.3s;
+  margin-top: 20px;
+}
+
+.get-started-button:hover {
+  background-color: #0056b3;
+}

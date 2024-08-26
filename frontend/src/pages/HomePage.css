@@ -1,0 +1,62 @@
+/* src/pages/HomePage.css */
+
+body {
+    font-family: 'Helvetica Neue', sans-serif;
+    color: #fff;
+    background-color: #000;
+  }
+  
+  header {
+    background-color: #000;
+    padding: 1rem;
+    text-align: center;
+  }
+  
+  h1 {
+    font-size: 3rem;
+    font-weight: bold;
+  }
+  
+  nav ul {
+    list-style-type: none;
+    padding: 0;
+  }
+  
+  nav ul li {
+    display: inline;
+    margin: 0 1rem;
+  }
+  
+  nav ul li a {
+    color: #fff;
+    text-decoration: none;
+  }
+  
+  .hero {
+    position: relative;
+    text-align: center;
+    color: #fff;
+  }
+  
+  .hero img {
+    width: 100%;
+    height: auto;
+  }
+  
+  .hero-text {
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+  
+  footer {
+    background-color: #000;
+    text-align: center;
+    padding: 1rem;
+  }
+  
+  footer p {
+    margin: 0;
+  }
+  
