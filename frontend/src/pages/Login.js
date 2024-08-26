@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
-import { login } from '../services/api';
+import { loginUser } from '../services/api';
 
 const Login = () => {
   const [email, setEmail] = useState('');
@@ -11,16 +11,16 @@ const Login = () => {
     event.preventDefault();
     try {
       const userData = { email, password };
-      const data = await login(userData);
+      const data = await loginUser(userData);
       console.log('Login successful:', data);
-      // Redirect or update UI after successful login
+      // Redirect or update UI after successful login if needed
     } catch (error) {
       setError(error.msg || 'Login failed');
     }
   };
 
   return (
-    <Container>
+    <Container maxWidth="xs">
       <Typography variant="h4" gutterBottom>Login</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -42,7 +42,9 @@ const Login = () => {
           required
         />
         {error && <Typography color="error">{error}</Typography>}
-        <Button type="submit" variant="contained" color="primary">Login</Button>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Login
+        </Button>
       </form>
     </Container>
   );
