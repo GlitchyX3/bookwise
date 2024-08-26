@@ -1,15 +1,17 @@
 const express = require('express');
 const mongoose = require('mongoose');
 const cors = require('cors');
-const authRoutes = require('./routes/auth');
-require('dotenv').config(); // Load environment variables
+const dotenv = require('dotenv');
+
+dotenv.config();
 
 const app = express();
+const PORT = process.env.PORT || 5000;
 
-// Update this with your actual Vercel domain
+// Allowed origins for CORS
 const allowedOrigins = [
-  'https://project-root-eta.vercel.app',
-  'http://localhost:3001', // For local development
+  'https://project-root-eta.vercel.app', // Production domain
+  'http://localhost:3001', // Local development
 ];
 
 // Middleware
@@ -24,15 +26,23 @@ app.use(cors({
   },
 }));
 
-// Use Routes
-app.use('/api/auth', authRoutes);
-
-// Connect to MongoDB
+// MongoDB Connection
 const mongoURI = process.env.MONGODB_URI || 'mongodb://localhost:27017/your-database-name';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 
-// Server setup
-const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+// JWT Secret
+const jwtSecret = process.env.JWT_SECRET;
+
+// Routes
+const authRoutes = require('./routes/auth');
+const bookRoutes = require('./routes/books');
+
+app.use('/api/auth', authRoutes);
+app.use('/api/books', bookRoutes);
+
+// Start Server
+app.listen(PORT, () => {
+  console.log(`Server is running on port: ${PORT}`);
+});
