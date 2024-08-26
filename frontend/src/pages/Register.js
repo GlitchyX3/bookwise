@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { TextField, Button, Container, Typography } from '@mui/material';
-import { register } from '../services/api';
+import { registerUser } from '../services/api'; // Ensure this matches the export name in your API service
 
 const Register = () => {
   const [email, setEmail] = useState('');
@@ -11,16 +11,16 @@ const Register = () => {
     event.preventDefault();
     try {
       const userData = { email, password };
-      const data = await register(userData);
+      const data = await registerUser(userData); // Ensure this matches the function name in your API service
       console.log('Registration successful:', data);
-      // Redirect or update UI after successful registration
+      // Redirect or update UI after successful registration if needed
     } catch (error) {
       setError(error.msg || 'Registration failed');
     }
   };
 
   return (
-    <Container>
+    <Container maxWidth="xs">
       <Typography variant="h4" gutterBottom>Register</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -42,7 +42,9 @@ const Register = () => {
           required
         />
         {error && <Typography color="error">{error}</Typography>}
-        <Button type="submit" variant="contained" color="primary">Register</Button>
+        <Button type="submit" variant="contained" color="primary" fullWidth>
+          Register
+        </Button>
       </form>
     </Container>
   );
