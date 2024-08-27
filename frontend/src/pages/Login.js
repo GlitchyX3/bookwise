@@ -9,18 +9,25 @@ const Login = () => {
 
   const handleSubmit = async (event) => {
     event.preventDefault();
+    setError('');
+
+    if (!email || !password) {
+      setError('Please enter all fields');
+      return;
+    }
+
     try {
       const userData = { email, password };
       const data = await loginUser(userData);
       console.log('Login successful:', data);
-      // Redirect or update UI after successful login if needed
+      // Handle successful login
     } catch (error) {
       setError(error.msg || 'Login failed');
     }
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container>
       <Typography variant="h4" gutterBottom>Login</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -42,9 +49,7 @@ const Login = () => {
           required
         />
         {error && <Typography color="error">{error}</Typography>}
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Login
-        </Button>
+        <Button type="submit" variant="contained" color="primary">Login</Button>
       </form>
     </Container>
   );
