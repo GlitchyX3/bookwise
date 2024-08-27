@@ -23,14 +23,13 @@ const Register = () => {
       const data = await registerUser(userData);
       console.log('Registration successful:', data);
       setSuccess('Registration successful!');
-      // Redirect or update UI after successful registration if needed
     } catch (error) {
       setError(error.msg || 'Registration failed');
     }
   };
 
   return (
-    <Container maxWidth="xs">
+    <Container>
       <Typography variant="h4" gutterBottom>Register</Typography>
       <form onSubmit={handleSubmit}>
         <TextField
@@ -52,10 +51,8 @@ const Register = () => {
           required
         />
         {error && <Typography color="error">{error}</Typography>}
-        {success && <Typography color="success">{success}</Typography>}
-        <Button type="submit" variant="contained" color="primary" fullWidth>
-          Register
-        </Button>
+        {success && <Typography color="primary">{success}</Typography>}
+        <Button type="submit" variant="contained" color="primary">Register</Button>
       </form>
     </Container>
   );
