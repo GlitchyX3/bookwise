@@ -6,7 +6,7 @@ const dotenv = require('dotenv');
 dotenv.config();
 
 const app = express();
-const PORT = process.env.PORT || 5000;
+const PORT = process.env.PORT || 3000;
 
 // Middleware
 app.use(express.json());
@@ -25,8 +25,8 @@ app.use(cors({
 }));
 
 // MongoDB Connection
-const mongoURI = process.env.MONGODB_URI;
-mongoose.connect(mongoURI)
+const mongoURI = 'mongodb+srv://bookwise:BXWKueya7aclXSam@bookwise.klo2g.mongodb.net/?retryWrites=true&w=majority&appName=bookwise';
+mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => console.error('MongoDB connection error:', err));
 
