@@ -15,6 +15,8 @@ app.use(cors({
     const allowedOrigins = [
       'https://project-root-eta.vercel.app', // Production domain
       'http://localhost:3001', // Local development
+      'https://bookwise-46ay.onrender.com', // Render domain
+      'https://project-root-1isy52lqr-glitchys-projects.vercel.app' // Glitchy project domain
     ];
     if (!origin || allowedOrigins.indexOf(origin) !== -1) {
       callback(null, true);
