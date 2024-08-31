@@ -2,6 +2,7 @@ import axios from 'axios';
 
 const apiUrl = process.env.REACT_APP_API_URL || 'http://localhost:3000/api';
 
+// Function to register a new user
 export const registerUser = async (userData) => {
   console.log('Attempting to register user with API URL:', apiUrl);
   try {
@@ -24,7 +25,7 @@ export const registerUser = async (userData) => {
   }
 };
 
-// Assuming the loginUser function is similar in structure
+// Function to log in a user
 export const loginUser = async (loginData) => {
   console.log('Attempting to log in user with API URL:', apiUrl);
   try {
