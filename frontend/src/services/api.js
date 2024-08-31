@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-// Base URL for API calls
 const apiUrl = process.env.REACT_APP_API_URL || 'https://bookwise-46ay.onrender.com/api';
 
 // Function to register a new user
