@@ -13,17 +13,20 @@ const Register = () => {
     event.preventDefault();
     setError('');
     setSuccess('');
+    console.log('Registration attempt with:', { username, email });
     if (!username || !email || !password) {
       setError('Please enter all fields');
       return;
     }
     try {
       const userData = { username, email, password };
+      console.log('Sending registration request with data:', userData);
       const data = await registerUser(userData);
-      console.log('Registration successful:', data);
+      console.log('Registration response:', data);
       setSuccess('Registration successful!');
     } catch (error) {
       console.error('Registration error:', error);
+      console.error('Error details:', error.response?.data);
       setError(error.response?.data?.message || error.message || 'Registration failed');
     }
   };
