@@ -28,7 +28,7 @@ app.use(cors({
 }));
 
 // MongoDB Connection
-const mongoURI = process.env.MONGO_URI;
+const mongoURI = 'mongodb+srv://bookwise:BXWKueya7aclXSam@bookwise.klo2g.mongodb.net/?retryWrites=true&w=majority&appName=bookwise';
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => {
