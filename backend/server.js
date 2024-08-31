@@ -28,7 +28,7 @@ app.use(cors({
 }));
 
 // MongoDB Connection
-const mongoURI = 'mongodb+srv://bookwise:BXWKueya7aclXSam@bookwise.klo2g.mongodb.net/?retryWrites=true&w=majority&appName=bookwise';
+const mongoURI = process.env.MONGO_URI;
 mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
   .then(() => console.log('MongoDB connected successfully'))
   .catch(err => {
@@ -36,15 +36,18 @@ mongoose.connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
     process.exit(1); // Exit with failure
   });
 
-// JWT Secret
-const jwtSecret = process.env.JWT_SECRET;
-
 // Routes
 const authRoutes = require('./routes/auth');
 const bookRoutes = require('./routes/books');
 
 app.use('/api/auth', authRoutes);
 app.use('/api/books', bookRoutes);
+
+// Error Handling Middleware
+app.use((err, req, res, next) => {
+  console.error('Server error:', err);
+  res.status(500).json({ message: 'Internal server error', error: err.message });
+});
 
 // Start Server
 app.listen(PORT, () => {
