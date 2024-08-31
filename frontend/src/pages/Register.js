@@ -1,72 +1,74 @@
 import React, { useState } from 'react';
-import { TextField, Button, Container, Typography } from '@mui/material';
 import { registerUser } from '../services/api';
 
-const Register = () => {
-  const [username, setUsername] = useState('');
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [error, setError] = useState('');
-  const [success, setSuccess] = useState('');
+function Register() {
+  const [formData, setFormData] = useState({
+    username: '',
+    email: '',
+    password: ''
+  });
+  const [error, setError] = useState(null);
 
-  const handleRegister = async () => {
-    setError('');
-    setSuccess('');
-    console.log('Registration attempt with:', { username, email });
-    if (!username || !email || !password) {
-      setError('Please enter all fields');
-      return;
-    }
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({
+      ...formData,
+      [name]: value
+    });
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    setError(null);
     try {
-      const userData = { username, email, password };
-      console.log('Sending registration request with data:', userData);
-      const response = await registerUser(userData);
-      console.log('Registration response:', response);
-      setSuccess('Registration successful!');
-      // You can handle further actions here, like redirecting to the login page
-    } catch (error) {
-      console.error('Registration error:', error);
-      console.error('Error details:', error.response?.data);
-      setError(error.response?.data?.message || error.message || 'Registration failed');
+      const result = await registerUser(formData);
+      console.log('Registration successful:', result);
+      // Handle successful registration (e.g., redirect to login page)
+    } catch (err) {
+      console.error('Registration error:', err);
+      setError(err.message || 'Registration failed');
     }
   };
 
   return (
-    <Container>
-      <Typography variant="h4" gutterBottom>Register</Typography>
-      <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
-        <TextField
-          label="Username"
-          fullWidth
-          margin="normal"
-          value={username}
-          onChange={(e) => setUsername(e.target.value)}
-          required
-        />
-        <TextField
-          label="Email"
-          type="email"
-          fullWidth
-          margin="normal"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          required
-        />
-        <TextField
-          label="Password"
-          type="password"
-          fullWidth
-          margin="normal"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          required
-        />
-        {error && <Typography color="error">{error}</Typography>}
-        {success && <Typography color="primary">{success}</Typography>}
-        <Button type="submit" variant="contained" color="primary">Register</Button>
+    <div>
+      <h2>Register</h2>
+      {error && <p style={{ color: 'red' }}>{error}</p>}
+      <form onSubmit={handleSubmit}>
+        <label>
+          Username:
+          <input
+            type="text"
+            name="username"
+            value={formData.username}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Email:
+          <input
+            type="email"
+            name="email"
+            value={formData.email}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <label>
+          Password:
+          <input
+            type="password"
+            name="password"
+            value={formData.password}
+            onChange={handleChange}
+          />
+        </label>
+        <br />
+        <button type="submit">Register</button>
       </form>
-    </Container>
+    </div>
   );
-};
+}
 
 export default Register;
