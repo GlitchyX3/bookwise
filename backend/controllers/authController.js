@@ -1,4 +1,4 @@
-const User = require('../models/User'); // Ensure this path is correct
+const User = require('../models/User');
 const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
 
@@ -6,6 +6,11 @@ const jwt = require('jsonwebtoken');
 exports.registerUser = async (req, res) => {
   try {
     const { username, email, password } = req.body;
+
+    // Validate input
+    if (!username || !email || !password) {
+      return res.status(400).json({ msg: 'Please provide all required fields' });
+    }
 
     // Check if user already exists
     let user = await User.findOne({ email });
@@ -37,7 +42,7 @@ exports.registerUser = async (req, res) => {
 
     res.status(201).json({ token });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error during registration:', err.message);
     res.status(500).send('Server error');
   }
 };
@@ -46,6 +51,11 @@ exports.registerUser = async (req, res) => {
 exports.loginUser = async (req, res) => {
   try {
     const { email, password } = req.body;
+
+    // Validate input
+    if (!email || !password) {
+      return res.status(400).json({ msg: 'Please provide all required fields' });
+    }
 
     // Check if user exists
     const user = await User.findOne({ email });
@@ -70,7 +80,7 @@ exports.loginUser = async (req, res) => {
 
     res.json({ token });
   } catch (err) {
-    console.error(err.message);
+    console.error('Error during login:', err.message);
     res.status(500).send('Server error');
   }
 };
