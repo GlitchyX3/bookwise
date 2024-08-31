@@ -1,59 +1,45 @@
-const jwt = require('jsonwebtoken');
 const User = require('../models/User');
 const bcrypt = require('bcryptjs');
+const jwt = require('jsonwebtoken');
+const dotenv = require('dotenv');
 
-// Registration logic
-exports.register = async (req, res) => {
-  const { name, email, password } = req.body;
+dotenv.config();
+
+const registerUser = async (req, res) => {
   try {
-    let user = await User.findOne({ email });
-    if (user) {
-      return res.status(400).json({ msg: 'User already exists' });
+    const { username, email, password } = req.body;
+
+    // Input validation
+    if (!username || !email || !password) {
+      return res.status(400).json({ message: 'Please provide all required fields' });
     }
 
-    user = new User({ name, email, password });
-    const salt = await bcrypt.genSalt(10);
-    user.password = await bcrypt.hash(password, salt);
-    await user.save();
+    // Check if user already exists
+    const existingUser = await User.findOne({ email });
+    if (existingUser) {
+      return res.status(400).json({ message: 'User already exists' });
+    }
 
-    const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      if (err) {
-        console.error('JWT Signing Error:', err);
-        return res.status(500).json({ msg: 'Token generation failed' });
-      }
-      res.json({ token });
+    // Hash password
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    // Create new user
+    const newUser = new User({
+      username,
+      email,
+      password: hashedPassword
     });
-  } catch (err) {
-    console.error('Server Error:', err);
-    res.status(500).json({ msg: 'Server error' });
+
+    await newUser.save();
+
+    // Respond with success
+    res.status(201).json({ message: 'User registered successfully' });
+  } catch (error) {
+    console.error('Error in registration:', error);
+    res.status(500).json({ message: 'Internal server error', error: error.message });
   }
 };
 
-// Login logic
-exports.login = async (req, res) => {
-  const { email, password } = req.body;
-  try {
-    let user = await User.findOne({ email });
-    if (!user) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
-    }
+// Other methods (login, etc.) should also be properly handled
 
-    const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
-      return res.status(400).json({ msg: 'Invalid credentials' });
-    }
-
-    const payload = { user: { id: user.id } };
-    jwt.sign(payload, process.env.JWT_SECRET, { expiresIn: '1h' }, (err, token) => {
-      if (err) {
-        console.error('JWT Signing Error:', err);
-        return res.status(500).json({ msg: 'Token generation failed' });
-      }
-      res.json({ token });
-    });
-  } catch (err) {
-    console.error('Server Error:', err);
-    res.status(500).json({ msg: 'Server error' });
-  }
-};
+module.exports = { registerUser };
