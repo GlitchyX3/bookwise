@@ -9,8 +9,7 @@ const Register = () => {
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
 
-  const handleSubmit = async (event) => {
-    event.preventDefault();
+  const handleRegister = async () => {
     setError('');
     setSuccess('');
     console.log('Registration attempt with:', { username, email });
@@ -21,9 +20,10 @@ const Register = () => {
     try {
       const userData = { username, email, password };
       console.log('Sending registration request with data:', userData);
-      const data = await registerUser(userData);
-      console.log('Registration response:', data);
+      const response = await registerUser(userData);
+      console.log('Registration response:', response);
       setSuccess('Registration successful!');
+      // You can handle further actions here, like redirecting to the login page
     } catch (error) {
       console.error('Registration error:', error);
       console.error('Error details:', error.response?.data);
@@ -34,7 +34,7 @@ const Register = () => {
   return (
     <Container>
       <Typography variant="h4" gutterBottom>Register</Typography>
-      <form onSubmit={handleSubmit}>
+      <form onSubmit={(e) => { e.preventDefault(); handleRegister(); }}>
         <TextField
           label="Username"
           fullWidth
