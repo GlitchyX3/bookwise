@@ -1,5 +1,4 @@
 import React, { useState } from 'react';
-import { registerUser } from '../services/api';
 
 function Register() {
   const [formData, setFormData] = useState({
@@ -7,7 +6,6 @@ function Register() {
     email: '',
     password: ''
   });
-  const [error, setError] = useState(null);
 
   const handleChange = (e) => {
     const { name, value } = e.target;
@@ -17,23 +15,15 @@ function Register() {
     });
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-    setError(null);
-    try {
-      const result = await registerUser(formData);
-      console.log('Registration successful:', result);
-      // Handle successful registration (e.g., redirect to login page)
-    } catch (err) {
-      console.error('Registration error:', err);
-      setError(err.message || 'Registration failed');
-    }
+    // Placeholder for registration logic
+    console.log('Registration data:', formData);
   };
 
   return (
     <div>
       <h2>Register</h2>
-      {error && <p style={{ color: 'red' }}>{error}</p>}
       <form onSubmit={handleSubmit}>
         <label>
           Username:
