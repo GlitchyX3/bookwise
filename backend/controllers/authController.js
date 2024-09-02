@@ -1,38 +1,84 @@
-const User = require('../models/User');
-const bcrypt = require('bcrypt');
+const bcrypt = require('bcryptjs');
 const jwt = require('jsonwebtoken');
+const User = require('../models/User');
 
-exports.registerUser = async (req, res) => {
+// Registration function
+exports.register = async (req, res) => {
+    const { username, email, password } = req.body;
+
     try {
-        const { username, email, password } = req.body;
-        const salt = await bcrypt.genSalt(10);
-        const hashedPassword = await bcrypt.hash(password, salt);
+        let user = await User.findOne({ email });
 
-        const newUser = new User({
+        if (user) {
+            return res.status(400).json({ msg: 'User already exists' });
+        }
+
+        user = new User({
             username,
             email,
-            password: hashedPassword,
+            password
         });
 
-        await newUser.save();
-        res.status(201).json({ message: 'User registered successfully!' });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        const salt = await bcrypt.genSalt(10);
+        user.password = await bcrypt.hash(password, salt);
+
+        await user.save();
+
+        const payload = {
+            user: {
+                id: user.id
+            }
+        };
+
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '5 days' },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
     }
 };
 
-exports.loginUser = async (req, res) => {
+// Login function
+exports.login = async (req, res) => {
+    const { email, password } = req.body;
+
     try {
-        const { email, password } = req.body;
-        const user = await User.findOne({ email });
-        if (!user) return res.status(400).json({ message: 'User not found' });
+        let user = await User.findOne({ email });
+
+        if (!user) {
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
 
         const isMatch = await bcrypt.compare(password, user.password);
-        if (!isMatch) return res.status(400).json({ message: 'Invalid credentials' });
 
-        const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, { expiresIn: '1h' });
-        res.status(200).json({ token });
-    } catch (error) {
-        res.status(500).json({ error: error.message });
+        if (!isMatch) {
+            return res.status(400).json({ msg: 'Invalid Credentials' });
+        }
+
+        const payload = {
+            user: {
+                id: user.id
+            }
+        };
+
+        jwt.sign(
+            payload,
+            process.env.JWT_SECRET,
+            { expiresIn: '5 days' },
+            (err, token) => {
+                if (err) throw err;
+                res.json({ token });
+            }
+        );
+    } catch (err) {
+        console.error(err.message);
+        res.status(500).send('Server error');
     }
 };
